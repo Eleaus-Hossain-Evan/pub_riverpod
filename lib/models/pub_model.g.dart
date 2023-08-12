@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pub_repository.dart';
+part of 'pub_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

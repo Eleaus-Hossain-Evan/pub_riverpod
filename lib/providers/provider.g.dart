@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'detail.dart';
+part of 'provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchPackageDetailsHash() =>
-    r'e65ba332cb8397cc5a1aca6e656233dff698391a';
+String _$fetchPackagesHash() => r'3637226080ea667823875a135a6c4cf002cb0329';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,6 +29,98 @@ class _SystemHash {
   }
 }
 
+typedef FetchPackagesRef = AutoDisposeFutureProviderRef<List<Package>>;
+
+/// See also [fetchPackages].
+@ProviderFor(fetchPackages)
+const fetchPackagesProvider = FetchPackagesFamily();
+
+/// See also [fetchPackages].
+class FetchPackagesFamily extends Family<AsyncValue<List<Package>>> {
+  /// See also [fetchPackages].
+  const FetchPackagesFamily();
+
+  /// See also [fetchPackages].
+  FetchPackagesProvider call({
+    required int page,
+    String search = '',
+  }) {
+    return FetchPackagesProvider(
+      page: page,
+      search: search,
+    );
+  }
+
+  @override
+  FetchPackagesProvider getProviderOverride(
+    covariant FetchPackagesProvider provider,
+  ) {
+    return call(
+      page: provider.page,
+      search: provider.search,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchPackagesProvider';
+}
+
+/// See also [fetchPackages].
+class FetchPackagesProvider extends AutoDisposeFutureProvider<List<Package>> {
+  /// See also [fetchPackages].
+  FetchPackagesProvider({
+    required this.page,
+    this.search = '',
+  }) : super.internal(
+          (ref) => fetchPackages(
+            ref,
+            page: page,
+            search: search,
+          ),
+          from: fetchPackagesProvider,
+          name: r'fetchPackagesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchPackagesHash,
+          dependencies: FetchPackagesFamily._dependencies,
+          allTransitiveDependencies:
+              FetchPackagesFamily._allTransitiveDependencies,
+        );
+
+  final int page;
+  final String search;
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchPackagesProvider &&
+        other.page == page &&
+        other.search == search;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, page.hashCode);
+    hash = _SystemHash.combine(hash, search.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$fetchPackageDetailsHash() =>
+    r'e65ba332cb8397cc5a1aca6e656233dff698391a';
 typedef FetchPackageDetailsRef = AutoDisposeFutureProviderRef<Package>;
 
 /// See also [fetchPackageDetails].
@@ -131,7 +222,7 @@ String _$pubRepositoryHash() => r'1f4dbfa0911f6467067fab244677acbcb8c7ad4e';
 
 /// See also [pubRepository].
 @ProviderFor(pubRepository)
-final pubRepositoryProvider = AutoDisposeProvider<PubRepository>.internal(
+final pubRepositoryProvider = AutoDisposeProvider<dynamic>.internal(
   pubRepository,
   name: r'pubRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -141,7 +232,7 @@ final pubRepositoryProvider = AutoDisposeProvider<PubRepository>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef PubRepositoryRef = AutoDisposeProviderRef<PubRepository>;
+typedef PubRepositoryRef = AutoDisposeProviderRef<dynamic>;
 String _$packageMetricsHash() => r'67cd25e50357e6e970d432c1d255085a23b856ac';
 
 abstract class _$PackageMetrics
