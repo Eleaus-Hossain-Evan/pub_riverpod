@@ -61,6 +61,35 @@ class ParcelModel extends Equatable {
     required this.updatedAt,
   });
 
+  factory ParcelModel.init() => ParcelModel(
+        id: '',
+        adminLogs: const [],
+        createdAt: '',
+        createdBy: '',
+        currentHubId: '',
+        customerInfo: CustomerInfo.init(),
+        destinationHubId: '',
+        exchangeParcelInfo: ExchangeParcelInfo.init(),
+        exchangePayment: RegularPaymentModel.init(),
+        exchangeStatus: '',
+        exchangeStatusLogs: const [],
+        hubHistory: const [],
+        isTransferMode: false,
+        merchantId: '',
+        merchantInfo: MerchantInfo.init(),
+        merchantUpdate: 0,
+        parcelType: '',
+        pickupStatus: '',
+        qrCode: '',
+        regularParcelInfo: RegularParcelInfo.init(),
+        regularPayment: RegularPaymentModel.init(),
+        regularStatus: '',
+        regularStatusLogs: const [],
+        serialId: '',
+        sourceHubId: '',
+        updatedAt: '',
+      );
+
   ParcelModel copyWith({
     MerchantInfo? merchantInfo,
     RegularParcelInfo? regularParcelInfo,

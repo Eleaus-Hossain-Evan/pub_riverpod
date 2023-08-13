@@ -13,7 +13,7 @@ class ParcelRepo {
     final data = await api.post(
       body: {"status": type.value},
       fromData: (json) => FetchAllParcelResponse.fromMap(json),
-      endPoint: "${APIRoute.FETCH_ALL_PARCEL}page=$page&limit=$limit",
+      endPoint: "${APIRoute.FETCH_ALL_PARCEL}?page=$page&limit=$limit",
       withToken: true,
     );
 

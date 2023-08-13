@@ -23,8 +23,8 @@ class AllParcelGen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final loading = useState(false);
-    final state = ref.watch(parcelProvider);
+    // final loading = useState(false);
+    // final state = ref.watch(parcelProvider);
 
     // ref.listen(parcelProvider, (previous, next) {
     //   if (previous!.loading == false && next.loading) {
@@ -55,18 +55,18 @@ class AllParcelGen extends HookConsumerWidget {
 
             final page = index ~/ pageSize + 1;
             final indexInPage = index % pageSize;
-            final parcelList = ref.watch(
-              fetchCategorizedParcelProvider(
+            final parcelResponse = ref.watch(
+              fetchAllParcelProvider(
                 type: listType,
                 page: page,
               ),
             );
 
-            return parcelList.when(
+            return parcelResponse.when(
               data: (data) {
-                if (indexInPage >= data.length) return null;
+                if (indexInPage >= data.data.length) return null;
 
-                final parcel = data[indexInPage];
+                final parcel = data.data[indexInPage];
                 return DeliveryListTile(
                   customerName: parcel.customerInfo.name,
                   address: "169/B, North Konipara, Tejgoan, Dhaka, Bangladesh",

@@ -6,7 +6,22 @@ part of 'parcel_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchAllParcelHash() => r'51e02f2bb213ff4ee8b07303cbb7d81b7ba74235';
+String _$parcelRepoHash() => r'9f6095deb24514dce749f068f8df0353750059e0';
+
+/// See also [parcelRepo].
+@ProviderFor(parcelRepo)
+final parcelRepoProvider = AutoDisposeProvider<ParcelRepo>.internal(
+  parcelRepo,
+  name: r'parcelRepoProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$parcelRepoHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ParcelRepoRef = AutoDisposeProviderRef<ParcelRepo>;
+String _$fetchCategorizedParcelHash() =>
+    r'26c44c5df0c59f89181bb9356ff8c40407605d0b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,108 +44,6 @@ class _SystemHash {
   }
 }
 
-typedef FetchAllParcelRef
-    = AutoDisposeFutureProviderRef<FetchAllParcelResponse>;
-
-/// See also [fetchAllParcel].
-@ProviderFor(fetchAllParcel)
-const fetchAllParcelProvider = FetchAllParcelFamily();
-
-/// See also [fetchAllParcel].
-class FetchAllParcelFamily extends Family<AsyncValue<FetchAllParcelResponse>> {
-  /// See also [fetchAllParcel].
-  const FetchAllParcelFamily();
-
-  /// See also [fetchAllParcel].
-  FetchAllParcelProvider call({
-    ParcelListType type = ParcelListType.all,
-    int page = 1,
-    int limit = 10,
-  }) {
-    return FetchAllParcelProvider(
-      type: type,
-      page: page,
-      limit: limit,
-    );
-  }
-
-  @override
-  FetchAllParcelProvider getProviderOverride(
-    covariant FetchAllParcelProvider provider,
-  ) {
-    return call(
-      type: provider.type,
-      page: provider.page,
-      limit: provider.limit,
-    );
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'fetchAllParcelProvider';
-}
-
-/// See also [fetchAllParcel].
-class FetchAllParcelProvider
-    extends AutoDisposeFutureProvider<FetchAllParcelResponse> {
-  /// See also [fetchAllParcel].
-  FetchAllParcelProvider({
-    this.type = ParcelListType.all,
-    this.page = 1,
-    this.limit = 10,
-  }) : super.internal(
-          (ref) => fetchAllParcel(
-            ref,
-            type: type,
-            page: page,
-            limit: limit,
-          ),
-          from: fetchAllParcelProvider,
-          name: r'fetchAllParcelProvider',
-          debugGetCreateSourceHash:
-              const bool.fromEnvironment('dart.vm.product')
-                  ? null
-                  : _$fetchAllParcelHash,
-          dependencies: FetchAllParcelFamily._dependencies,
-          allTransitiveDependencies:
-              FetchAllParcelFamily._allTransitiveDependencies,
-        );
-
-  final ParcelListType type;
-  final int page;
-  final int limit;
-
-  @override
-  bool operator ==(Object other) {
-    return other is FetchAllParcelProvider &&
-        other.type == type &&
-        other.page == page &&
-        other.limit == limit;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, type.hashCode);
-    hash = _SystemHash.combine(hash, page.hashCode);
-    hash = _SystemHash.combine(hash, limit.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
-}
-
-String _$fetchCategorizedParcelHash() =>
-    r'26c44c5df0c59f89181bb9356ff8c40407605d0b';
 typedef FetchCategorizedParcelRef
     = AutoDisposeFutureProviderRef<List<ParcelModel>>;
 
@@ -229,6 +142,127 @@ class FetchCategorizedParcelProvider
     hash = _SystemHash.combine(hash, limit.hashCode);
 
     return _SystemHash.finish(hash);
+  }
+}
+
+String _$fetchAllParcelHash() => r'58d9a67cbde240d7efe7cf6ecca66c461102032f';
+
+abstract class _$FetchAllParcel
+    extends BuildlessAutoDisposeAsyncNotifier<FetchAllParcelResponse> {
+  late final ParcelListType type;
+  late final int page;
+  late final int limit;
+
+  Future<FetchAllParcelResponse> build({
+    ParcelListType type = ParcelListType.all,
+    int page = 1,
+    int limit = 10,
+  });
+}
+
+/// See also [FetchAllParcel].
+@ProviderFor(FetchAllParcel)
+const fetchAllParcelProvider = FetchAllParcelFamily();
+
+/// See also [FetchAllParcel].
+class FetchAllParcelFamily extends Family<AsyncValue<FetchAllParcelResponse>> {
+  /// See also [FetchAllParcel].
+  const FetchAllParcelFamily();
+
+  /// See also [FetchAllParcel].
+  FetchAllParcelProvider call({
+    ParcelListType type = ParcelListType.all,
+    int page = 1,
+    int limit = 10,
+  }) {
+    return FetchAllParcelProvider(
+      type: type,
+      page: page,
+      limit: limit,
+    );
+  }
+
+  @override
+  FetchAllParcelProvider getProviderOverride(
+    covariant FetchAllParcelProvider provider,
+  ) {
+    return call(
+      type: provider.type,
+      page: provider.page,
+      limit: provider.limit,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchAllParcelProvider';
+}
+
+/// See also [FetchAllParcel].
+class FetchAllParcelProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    FetchAllParcel, FetchAllParcelResponse> {
+  /// See also [FetchAllParcel].
+  FetchAllParcelProvider({
+    this.type = ParcelListType.all,
+    this.page = 1,
+    this.limit = 10,
+  }) : super.internal(
+          () => FetchAllParcel()
+            ..type = type
+            ..page = page
+            ..limit = limit,
+          from: fetchAllParcelProvider,
+          name: r'fetchAllParcelProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchAllParcelHash,
+          dependencies: FetchAllParcelFamily._dependencies,
+          allTransitiveDependencies:
+              FetchAllParcelFamily._allTransitiveDependencies,
+        );
+
+  final ParcelListType type;
+  final int page;
+  final int limit;
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchAllParcelProvider &&
+        other.type == type &&
+        other.page == page &&
+        other.limit == limit;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+    hash = _SystemHash.combine(hash, page.hashCode);
+    hash = _SystemHash.combine(hash, limit.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+
+  @override
+  Future<FetchAllParcelResponse> runNotifierBuild(
+    covariant FetchAllParcel notifier,
+  ) {
+    return notifier.build(
+      type: type,
+      page: page,
+      limit: limit,
+    );
   }
 }
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

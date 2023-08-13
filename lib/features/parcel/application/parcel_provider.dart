@@ -2,7 +2,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:http/http.dart' as http;
 
 import '../../../core/core.dart';
 import '../domin/fetch_all_parcel_reponse.dart';
@@ -83,31 +82,73 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
 }
 
 @riverpod
-Future<FetchAllParcelResponse> fetchAllParcel(
-  FetchAllParcelRef ref, {
-  ParcelListType type = ParcelListType.all,
-  int page = 1,
-  int limit = 10,
-}) async {
-  final uri = Uri(
-    scheme: APIRoute.scheme,
-    host: APIRoute.BASE_URL,
-    path: APIRoute.FETCH_ALL_PARCEL,
-    port: int.parse("8080", radix: 16),
-    queryParameters: <String, String>{
-      'page': '$page',
-      'limit': '$limit',
-    },
-  );
-  final json = await http.post(
-    Uri.parse(
-        "${APIRoute.BASE_URL}${APIRoute.FETCH_ALL_PARCEL}?page=$page&limit=$limit"),
-    // uri,
-    body: {"status": type.value},
-  );
+ParcelRepo parcelRepo(ParcelRepoRef ref) => ParcelRepo();
 
-  Logger.i(json);
-  return FetchAllParcelResponse.fromJson(json.body);
+// @riverpod
+// Future<FetchAllParcelResponse> fetchAllParcel(
+//   FetchAllParcelRef ref, {
+//   ParcelListType type = ParcelListType.all,
+//   int page = 1,
+//   int limit = 10,
+// }) async {
+//   final uri = Uri(
+//     scheme: APIRoute.scheme,
+//     host: APIRoute.BASE_URL,
+//     path: APIRoute.FETCH_ALL_PARCEL,
+//     port: int.parse("8080", radix: 16),
+//     queryParameters: <String, String>{
+//       'page': '$page',
+//       'limit': '$limit',
+//     },
+//   );
+//   final data = await http.post(
+//     Uri.parse(
+//         "https://api.courier.b2gsoft.xyz/api/v1/parcel/fetch-all-parcel-by-merchant?page=$page&limit=$limit"),
+//     // uri,
+//     body: {"status": type.value},
+//   );
+
+//   // final data = await NetworkHandler.instance.post(
+//   //   body: {"status": type.value},
+//   //   fromData: (json) => FetchAllParcelResponse.fromMap(json),
+//   //   endPoint: "${APIRoute.FETCH_ALL_PARCEL}page=$page&limit=$limit",
+//   //   withToken: true,
+//   // );
+
+//   Logger.i(data);
+//   return FetchAllParcelResponse.fromJson(data.body);
+// }
+
+@riverpod
+class FetchAllParcel extends _$FetchAllParcel {
+  @override
+  Future<FetchAllParcelResponse> build(
+      {ParcelListType type = ParcelListType.all,
+      int page = 1,
+      int limit = 10}) async {
+    // final data = await http.post(
+    //   Uri.parse(
+    //       "https://api.courier.b2gsoft.xyz/api/v1/parcel/fetch-all-parcel-by-merchant?page=$page&limit=$limit"),
+    //   // uri,
+    //   body: {"status": type.value},
+    // );
+
+    // Logger.i(data.body);
+    // return FetchAllParcelResponse.fromJson(data.body);
+
+    final result = await ref
+        .watch(parcelRepoProvider)
+        .fetchParcelList(type: type, limit: limit, page: page);
+
+    Logger.i(result);
+
+    return result.fold((l) {
+      showErrorToast(l.error.message);
+      return FetchAllParcelResponse.init();
+    }, (r) => r);
+  }
+
+  // Add methods to mutate the state
 }
 
 @riverpod
