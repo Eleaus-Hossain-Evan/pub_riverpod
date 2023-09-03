@@ -126,16 +126,6 @@ class FetchAllParcel extends _$FetchAllParcel {
       {ParcelListType type = ParcelListType.all,
       int page = 1,
       int limit = 10}) async {
-    // final data = await http.post(
-    //   Uri.parse(
-    //       "https://api.courier.b2gsoft.xyz/api/v1/parcel/fetch-all-parcel-by-merchant?page=$page&limit=$limit"),
-    //   // uri,
-    //   body: {"status": type.value},
-    // );
-
-    // Logger.i(data.body);
-    // return FetchAllParcelResponse.fromJson(data.body);
-
     final result = await ref
         .watch(parcelRepoProvider)
         .fetchParcelList(type: type, limit: limit, page: page);

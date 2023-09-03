@@ -44,14 +44,29 @@ class AllParcelGen extends HookConsumerWidget {
       return () => BotToast.closeAllLoading();
     }, const []);
 
-    return Center(
+    return RefreshIndicator(
+      // enablePullUp: true,
+      // header: const MaterialHeader(),
+      onRefresh: () async {
+        // page.value = 1;
+
+        return await ref
+            .refresh(fetchAllParcelProvider(page: 1, type: listType).future)
+            // .parcelPickupList(
+            //   page: page.value,
+            //   limit: 10,
+            //   type: ParcelRiderType.all,
+            //   isComplete: false,
+            // )
+            .then((_) {});
+      },
       child: ListView.custom(
         padding: padding0,
         // alternateWidget:
         //     "No order placed yet!".text.caption(context).make().objectCenter(),
         childrenDelegate: SliverChildBuilderDelegate(
           (context, index) {
-            const pageSize = searchPageSize;
+            const pageSize = 6;
 
             final page = index ~/ pageSize + 1;
             final indexInPage = index % pageSize;
@@ -59,6 +74,7 @@ class AllParcelGen extends HookConsumerWidget {
               fetchAllParcelProvider(
                 type: listType,
                 page: page,
+                limit: pageSize,
               ),
             );
 
