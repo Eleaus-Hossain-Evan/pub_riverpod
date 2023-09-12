@@ -16,7 +16,7 @@ void main() {
   NetworkHandler.instance
     ..setup(baseUrl: APIRoute.BASE_URL, showLogs: false)
     ..setToken(
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0YzRkMjcxY2VjNWIzNjU3ODViODk4OSIsIm5hbWUiOiJmb3JoYWQiLCJwaG9uZSI6IjAxNzI4ODk3MjU1IiwiZW1haWwiOiJhYmRAZ21haWwuY29tIiwiaHViSWQiOiI2NGI2Nzg5ZTc0MjhjNjI5MWFjOTlhZDkiLCJodWJOYW1lIjoiS2ggTmlzaGFkIiwicm9sZSI6Im1lcmNoYW50In0sImlhdCI6MTY5MTM4ODY0NywiZXhwIjoxNzIyOTI0NjQ3fQ.9LIM95ZRy-1PQcC9yA6D9fGmC5U-BDPWR1LDw2ljafk');
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7Il9pZCI6IjY0ZjA0ZmY1YThlMDlmNDMxNDQ4YTQ1ZCIsIm5hbWUiOiJhbHZpIiwicGhvbmUiOiIwMTkzOTQxODg5MSIsImVtYWlsIjoieHl6QGdtYWlsLmNvbSIsImh1YklkIjoiNjRlZjFkN2FiMDFjNDIxZDc5YzkwNGE1IiwiaHViTmFtZSI6IlRlc3QgMSBIdWIiLCJyb2xlIjoibWVyY2hhbnQifSwiaWF0IjoxNjk0NDM2ODAxLCJleHAiOjE2OTUwNDE2MDF9.lbWh5snmVHdSqrRWcO4dWI-azyq4oPAUnYwIiI2_yY8');
   runApp(const ProviderScope(child: MainApp()));
 }
 

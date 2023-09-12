@@ -1,12 +1,12 @@
 import '../../../core/core.dart';
 import '../domin/fetch_all_parcel_reponse.dart';
-import '../presentation/parcel_list_screen.dart';
+import '../domin/parcel_model.dart';
 
 class ParcelRepo {
   final api = NetworkHandler.instance;
 
   Future<Either<CleanFailure, FetchAllParcelResponse>> fetchParcelList({
-    ParcelListType type = ParcelListType.all,
+    ParcelRegularStatus type = ParcelRegularStatus.all,
     int page = 1,
     int limit = 10,
   }) async {

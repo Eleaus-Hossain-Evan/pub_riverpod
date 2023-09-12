@@ -21,7 +21,7 @@ final parcelRepoProvider = AutoDisposeProvider<ParcelRepo>.internal(
 
 typedef ParcelRepoRef = AutoDisposeProviderRef<ParcelRepo>;
 String _$fetchCategorizedParcelHash() =>
-    r'26c44c5df0c59f89181bb9356ff8c40407605d0b';
+    r'4f272b369f3c065fe83fe60e561bb3f9b6b392f6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -59,7 +59,7 @@ class FetchCategorizedParcelFamily
 
   /// See also [fetchCategorizedParcel].
   FetchCategorizedParcelProvider call({
-    ParcelListType type = ParcelListType.all,
+    ParcelRegularStatus type = ParcelRegularStatus.all,
     int page = 1,
     int limit = 10,
   }) {
@@ -101,7 +101,7 @@ class FetchCategorizedParcelProvider
     extends AutoDisposeFutureProvider<List<ParcelModel>> {
   /// See also [fetchCategorizedParcel].
   FetchCategorizedParcelProvider({
-    this.type = ParcelListType.all,
+    this.type = ParcelRegularStatus.all,
     this.page = 1,
     this.limit = 10,
   }) : super.internal(
@@ -122,7 +122,7 @@ class FetchCategorizedParcelProvider
               FetchCategorizedParcelFamily._allTransitiveDependencies,
         );
 
-  final ParcelListType type;
+  final ParcelRegularStatus type;
   final int page;
   final int limit;
 
@@ -145,16 +145,16 @@ class FetchCategorizedParcelProvider
   }
 }
 
-String _$fetchAllParcelHash() => r'58d9a67cbde240d7efe7cf6ecca66c461102032f';
+String _$fetchAllParcelHash() => r'b2a166a7b0f3fc2c3e34604cf1c2778f27a8c0f1';
 
 abstract class _$FetchAllParcel
     extends BuildlessAutoDisposeAsyncNotifier<FetchAllParcelResponse> {
-  late final ParcelListType type;
+  late final ParcelRegularStatus type;
   late final int page;
   late final int limit;
 
   Future<FetchAllParcelResponse> build({
-    ParcelListType type = ParcelListType.all,
+    ParcelRegularStatus type = ParcelRegularStatus.all,
     int page = 1,
     int limit = 10,
   });
@@ -171,7 +171,7 @@ class FetchAllParcelFamily extends Family<AsyncValue<FetchAllParcelResponse>> {
 
   /// See also [FetchAllParcel].
   FetchAllParcelProvider call({
-    ParcelListType type = ParcelListType.all,
+    ParcelRegularStatus type = ParcelRegularStatus.all,
     int page = 1,
     int limit = 10,
   }) {
@@ -213,7 +213,7 @@ class FetchAllParcelProvider extends AutoDisposeAsyncNotifierProviderImpl<
     FetchAllParcel, FetchAllParcelResponse> {
   /// See also [FetchAllParcel].
   FetchAllParcelProvider({
-    this.type = ParcelListType.all,
+    this.type = ParcelRegularStatus.all,
     this.page = 1,
     this.limit = 10,
   }) : super.internal(
@@ -232,7 +232,7 @@ class FetchAllParcelProvider extends AutoDisposeAsyncNotifierProviderImpl<
               FetchAllParcelFamily._allTransitiveDependencies,
         );
 
-  final ParcelListType type;
+  final ParcelRegularStatus type;
   final int page;
   final int limit;
 

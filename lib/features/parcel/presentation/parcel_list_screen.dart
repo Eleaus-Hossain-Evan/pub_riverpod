@@ -2,24 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:pub_riverpod/features/parcel/domin/parcel_model.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../core/core.dart';
 import 'widgets/all_parcel_gen.dart';
-
-enum ParcelListType {
-  all('all'),
-  pending('pending'),
-  pickup('pickup'),
-  shipping('shipping'),
-  shipped('shipped'),
-  dropoff('dropoff'),
-  returns("return"),
-  cancel('cancel');
-
-  final String value;
-  const ParcelListType(this.value);
-}
 
 class ParcelListScreen extends HookConsumerWidget {
   static const route = '/parcel-list';
@@ -28,7 +15,7 @@ class ParcelListScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tabController = useTabController(
-      initialLength: ParcelListType.values.length,
+      initialLength: ParcelRegularStatus.values.length,
     );
     return Scaffold(
       appBar: KAppBar(
@@ -59,7 +46,7 @@ class ParcelListScreen extends HookConsumerWidget {
           ),
           indicatorSize: TabBarIndicatorSize.tab,
           indicatorPadding: EdgeInsets.symmetric(vertical: 4.w),
-          tabs: ParcelListType.values
+          tabs: ParcelRegularStatus.values
               .map((e) => Tab(
                     text: e.value.capitalized,
                   ))
@@ -68,7 +55,7 @@ class ParcelListScreen extends HookConsumerWidget {
       ),
       body: TabBarView(
         controller: tabController,
-        children: ParcelListType.values
+        children: ParcelRegularStatus.values
             .map((e) => AllParcelGen(listType: e))
             .toList(),
       ),

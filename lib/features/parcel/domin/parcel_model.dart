@@ -2,25 +2,68 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'customer_info_model.dart';
+import 'hub_model.dart';
+import 'merchant_info_model.dart';
 import 'regular_charge_model.dart';
+import 'regular_parcel_info_model.dart';
+
+enum ParcelRegularStatus {
+  all,
+  pending,
+  hold,
+  pickup,
+  shipping,
+  shipped,
+  dropoff,
+  // partial,
+  returns,
+  cancel
+}
+
+extension ParcelListTypeExt on ParcelRegularStatus {
+  String get value {
+    switch (this) {
+      case ParcelRegularStatus.all:
+        return "all";
+      case ParcelRegularStatus.pending:
+        return "pending";
+      case ParcelRegularStatus.hold:
+        return "hold";
+      case ParcelRegularStatus.pickup:
+        return "pickup";
+      case ParcelRegularStatus.shipping:
+        return "shipping";
+      case ParcelRegularStatus.shipped:
+        return "shipped";
+      case ParcelRegularStatus.dropoff:
+        return "dropoff";
+      // case ParcelRegularStatus.partial:
+      //   return "partial";
+      case ParcelRegularStatus.returns:
+        return "return";
+      case ParcelRegularStatus.cancel:
+        return "cancel";
+    }
+  }
+}
 
 class ParcelModel extends Equatable {
-  final MerchantInfo merchantInfo;
-  final RegularParcelInfo regularParcelInfo;
-  final ExchangeParcelInfo exchangeParcelInfo;
-  final RegularPaymentModel regularPayment;
-  final RegularPaymentModel exchangePayment;
+  final MerchantInfoModel merchantInfo; //
+  final RegularParcelInfoModel regularParcelInfo; //
+  final RegularParcelInfoModel exchangeParcelInfo; //
+  final RegularPaymentModel regularPayment; //
+  final RegularPaymentModel exchangePayment; //
   final String createdBy;
   final String merchantId;
   final String parcelType;
-  final List<dynamic> hubHistory;
   final String pickupStatus;
   final bool isTransferMode;
-  final String regularStatus;
+  final ParcelRegularStatus regularStatus;
   final String exchangeStatus;
   final int merchantUpdate;
   final String id;
-  final CustomerInfo customerInfo;
+  final CustomerInfoModel customerInfo; //
   final String sourceHubId;
   final String currentHubId;
   final String destinationHubId;
@@ -31,6 +74,7 @@ class ParcelModel extends Equatable {
   final List<dynamic> exchangeStatusLogs;
   final String createdAt;
   final String updatedAt;
+  final HubModel sourceHub;
 
   const ParcelModel({
     required this.merchantInfo,
@@ -41,7 +85,6 @@ class ParcelModel extends Equatable {
     required this.createdBy,
     required this.merchantId,
     required this.parcelType,
-    required this.hubHistory,
     required this.pickupStatus,
     required this.isTransferMode,
     required this.regularStatus,
@@ -59,54 +102,54 @@ class ParcelModel extends Equatable {
     required this.exchangeStatusLogs,
     required this.createdAt,
     required this.updatedAt,
+    required this.sourceHub,
   });
 
   factory ParcelModel.init() => ParcelModel(
-        id: '',
-        adminLogs: const [],
-        createdAt: '',
-        createdBy: '',
-        currentHubId: '',
-        customerInfo: CustomerInfo.init(),
-        destinationHubId: '',
-        exchangeParcelInfo: ExchangeParcelInfo.init(),
+        merchantInfo: MerchantInfoModel.init(),
+        regularParcelInfo: RegularParcelInfoModel.init(),
+        exchangeParcelInfo: RegularParcelInfoModel.init(),
+        regularPayment: RegularPaymentModel.init(),
         exchangePayment: RegularPaymentModel.init(),
-        exchangeStatus: '',
-        exchangeStatusLogs: const [],
-        hubHistory: const [],
-        isTransferMode: false,
+        createdBy: '',
         merchantId: '',
-        merchantInfo: MerchantInfo.init(),
-        merchantUpdate: 0,
         parcelType: '',
         pickupStatus: '',
-        qrCode: '',
-        regularParcelInfo: RegularParcelInfo.init(),
-        regularPayment: RegularPaymentModel.init(),
-        regularStatus: '',
-        regularStatusLogs: const [],
-        serialId: '',
+        isTransferMode: false,
+        regularStatus: ParcelRegularStatus.all,
+        exchangeStatus: '',
+        merchantUpdate: 0,
+        id: '',
+        customerInfo: CustomerInfoModel.init(),
         sourceHubId: '',
+        currentHubId: '',
+        destinationHubId: '',
+        regularStatusLogs: const [],
+        adminLogs: const [],
+        serialId: '',
+        qrCode: '',
+        exchangeStatusLogs: const [],
+        createdAt: '',
         updatedAt: '',
+        sourceHub: HubModel.init(),
       );
 
   ParcelModel copyWith({
-    MerchantInfo? merchantInfo,
-    RegularParcelInfo? regularParcelInfo,
-    ExchangeParcelInfo? exchangeParcelInfo,
+    MerchantInfoModel? merchantInfo,
+    RegularParcelInfoModel? regularParcelInfo,
+    RegularParcelInfoModel? exchangeParcelInfo,
     RegularPaymentModel? regularPayment,
     RegularPaymentModel? exchangePayment,
     String? createdBy,
     String? merchantId,
     String? parcelType,
-    List<dynamic>? hubHistory,
     String? pickupStatus,
     bool? isTransferMode,
-    String? regularStatus,
+    ParcelRegularStatus? regularStatus,
     String? exchangeStatus,
     int? merchantUpdate,
     String? id,
-    CustomerInfo? customerInfo,
+    CustomerInfoModel? customerInfo,
     String? sourceHubId,
     String? currentHubId,
     String? destinationHubId,
@@ -117,6 +160,7 @@ class ParcelModel extends Equatable {
     List<dynamic>? exchangeStatusLogs,
     String? createdAt,
     String? updatedAt,
+    HubModel? sourceHub,
   }) {
     return ParcelModel(
       merchantInfo: merchantInfo ?? this.merchantInfo,
@@ -127,7 +171,6 @@ class ParcelModel extends Equatable {
       createdBy: createdBy ?? this.createdBy,
       merchantId: merchantId ?? this.merchantId,
       parcelType: parcelType ?? this.parcelType,
-      hubHistory: hubHistory ?? this.hubHistory,
       pickupStatus: pickupStatus ?? this.pickupStatus,
       isTransferMode: isTransferMode ?? this.isTransferMode,
       regularStatus: regularStatus ?? this.regularStatus,
@@ -145,6 +188,7 @@ class ParcelModel extends Equatable {
       exchangeStatusLogs: exchangeStatusLogs ?? this.exchangeStatusLogs,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      sourceHub: sourceHub ?? this.sourceHub,
     );
   }
 
@@ -158,10 +202,9 @@ class ParcelModel extends Equatable {
       'createdBy': createdBy,
       'merchantId': merchantId,
       'parcelType': parcelType,
-      'hubHistory': hubHistory,
       'pickupStatus': pickupStatus,
       'isTransferMode': isTransferMode,
-      'regularStatus': regularStatus,
+      'regularStatus': regularStatus.value,
       'exchangeStatus': exchangeStatus,
       'merchantUpdate': merchantUpdate,
       '_id': id,
@@ -176,20 +219,21 @@ class ParcelModel extends Equatable {
       'exchangeStatusLogs': exchangeStatusLogs,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
+      'sourceHub': sourceHub.toMap(),
     };
   }
 
   factory ParcelModel.fromMap(Map<String, dynamic> map) {
     return ParcelModel(
       merchantInfo: map['merchantInfo'] != null
-          ? MerchantInfo.fromMap(map['merchantInfo'])
-          : MerchantInfo.init(),
+          ? MerchantInfoModel.fromMap(map['merchantInfo'])
+          : MerchantInfoModel.init(),
       regularParcelInfo: map['regularParcelInfo'] != null
-          ? RegularParcelInfo.fromMap(map['regularParcelInfo'])
-          : RegularParcelInfo.init(),
+          ? RegularParcelInfoModel.fromMap(map['regularParcelInfo'])
+          : RegularParcelInfoModel.init(),
       exchangeParcelInfo: map['exchangeParcelInfo'] != null
-          ? ExchangeParcelInfo.fromMap(map['exchangeParcelInfo'])
-          : ExchangeParcelInfo.init(),
+          ? RegularParcelInfoModel.fromMap(map['exchangeParcelInfo'])
+          : RegularParcelInfoModel.init(),
       regularPayment: map['regularPayment'] != null
           ? RegularPaymentModel.fromMap(map['regularPayment'])
           : RegularPaymentModel.init(),
@@ -199,16 +243,16 @@ class ParcelModel extends Equatable {
       createdBy: map['createdBy'] ?? '',
       merchantId: map['merchantId'] ?? '',
       parcelType: map['parcelType'] ?? '',
-      hubHistory: List<dynamic>.from(map['hubHistory'] ?? const []),
       pickupStatus: map['pickupStatus'] ?? '',
       isTransferMode: map['isTransferMode'] ?? false,
-      regularStatus: map['regularStatus'] ?? '',
+      regularStatus: ParcelRegularStatus.values
+          .firstWhere((e) => e.value == map['regularStatus']),
       exchangeStatus: map['exchangeStatus'] ?? '',
       merchantUpdate: map['merchantUpdate']?.toInt() ?? 0,
       id: map['_id'] ?? '',
       customerInfo: map['customerInfo'] != null
-          ? CustomerInfo.fromMap(map['customerInfo'])
-          : CustomerInfo.init(),
+          ? CustomerInfoModel.fromMap(map['customerInfo'])
+          : CustomerInfoModel.init(),
       sourceHubId: map['sourceHubId'] ?? '',
       currentHubId: map['currentHubId'] ?? '',
       destinationHubId: map['destinationHubId'] ?? '',
@@ -219,11 +263,13 @@ class ParcelModel extends Equatable {
           map['adminLogs']?.map((x) => StatusLog.fromMap(x)) ?? const []),
       serialId: map['serialId'] ?? '',
       qrCode: map['qrCode'] ?? '',
-      exchangeStatusLogs: List<StatusLog>.from(
-          map['exchangeStatusLogs']?.map((x) => StatusLog.fromMap(x)) ??
-              const []),
+      exchangeStatusLogs:
+          List<StatusLog>.from(map['exchangeStatusLogs'] ?? const []),
       createdAt: map['createdAt'] ?? '',
       updatedAt: map['updatedAt'] ?? '',
+      sourceHub: map['sourceHub'] != null
+          ? HubModel.fromMap(map['sourceHub'])
+          : HubModel.init(),
     );
   }
 
@@ -234,7 +280,7 @@ class ParcelModel extends Equatable {
 
   @override
   String toString() {
-    return 'Data(merchantInfo: $merchantInfo, regularParcelInfo: $regularParcelInfo, exchangeParcelInfo: $exchangeParcelInfo, regularPayment: $regularPayment, exchangePayment: $exchangePayment, createdBy: $createdBy, merchantId: $merchantId, parcelType: $parcelType, hubHistory: $hubHistory, pickupStatus: $pickupStatus, isTransferMode: $isTransferMode, regularStatus: $regularStatus, exchangeStatus: $exchangeStatus, merchantUpdate: $merchantUpdate, _id: $id, customerInfo: $customerInfo, sourceHubId: $sourceHubId, currentHubId: $currentHubId, destinationHubId: $destinationHubId, regularStatusLogs: $regularStatusLogs, adminLogs: $adminLogs, serialId: $serialId, qrCode: $qrCode, exchangeStatusLogs: $exchangeStatusLogs, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ParcelModel(merchantInfo: $merchantInfo, regularParcelInfo: $regularParcelInfo, exchangeParcelInfo: $exchangeParcelInfo, regularPayment: $regularPayment, exchangePayment: $exchangePayment, createdBy: $createdBy, merchantId: $merchantId, parcelType: $parcelType, pickupStatus: $pickupStatus, isTransferMode: $isTransferMode, regularStatus: $regularStatus, exchangeStatus: $exchangeStatus, merchantUpdate: $merchantUpdate, id: $id, customerInfo: $customerInfo, sourceHubId: $sourceHubId, currentHubId: $currentHubId, destinationHubId: $destinationHubId, regularStatusLogs: $regularStatusLogs, adminLogs: $adminLogs, serialId: $serialId, qrCode: $qrCode, exchangeStatusLogs: $exchangeStatusLogs, createdAt: $createdAt, updatedAt: $updatedAt, sourceHub: $sourceHub)';
   }
 
   @override
@@ -248,7 +294,6 @@ class ParcelModel extends Equatable {
       createdBy,
       merchantId,
       parcelType,
-      hubHistory,
       pickupStatus,
       isTransferMode,
       regularStatus,
@@ -266,335 +311,7 @@ class ParcelModel extends Equatable {
       exchangeStatusLogs,
       createdAt,
       updatedAt,
-    ];
-  }
-}
-
-class MerchantInfo extends Equatable {
-  final String address;
-  final String shopAddress;
-  final String name;
-  final String phone;
-  final String shopName;
-
-  const MerchantInfo({
-    required this.address,
-    required this.shopAddress,
-    required this.name,
-    required this.phone,
-    required this.shopName,
-  });
-
-  factory MerchantInfo.init() => const MerchantInfo(
-      address: '', shopAddress: '', name: '', phone: '', shopName: '');
-
-  MerchantInfo copyWith({
-    String? address,
-    String? shopAddress,
-    String? name,
-    String? phone,
-    String? shopName,
-  }) {
-    return MerchantInfo(
-      address: address ?? this.address,
-      shopAddress: shopAddress ?? this.shopAddress,
-      name: name ?? this.name,
-      phone: phone ?? this.phone,
-      shopName: shopName ?? this.shopName,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'address': address,
-      'shopAddress': shopAddress,
-      'name': name,
-      'phone': phone,
-      'shopName': shopName,
-    };
-  }
-
-  factory MerchantInfo.fromMap(Map<String, dynamic> map) {
-    return MerchantInfo(
-      address: map['address'] ?? '',
-      shopAddress: map['shopAddress'] ?? '',
-      name: map['name'] ?? '',
-      phone: map['phone'] ?? '',
-      shopName: map['shopName'] ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory MerchantInfo.fromJson(String source) =>
-      MerchantInfo.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'MerchantInfo(address: $address, shopAddress: $shopAddress, name: $name, phone: $phone, shopName: $shopName)';
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      address,
-      shopAddress,
-      name,
-      phone,
-      shopName,
-    ];
-  }
-}
-
-class RegularParcelInfo extends Equatable {
-  final String invoiceId;
-  final String weight;
-  final int productPrice;
-  final String materialType;
-  final String category;
-  final String details;
-
-  const RegularParcelInfo({
-    required this.invoiceId,
-    required this.weight,
-    required this.productPrice,
-    required this.materialType,
-    required this.category,
-    required this.details,
-  });
-
-  factory RegularParcelInfo.init() => const RegularParcelInfo(
-      invoiceId: '',
-      weight: '',
-      productPrice: 0,
-      materialType: '',
-      category: '',
-      details: '');
-
-  RegularParcelInfo copyWith({
-    String? invoiceId,
-    String? weight,
-    int? productPrice,
-    String? materialType,
-    String? category,
-    String? details,
-  }) {
-    return RegularParcelInfo(
-      invoiceId: invoiceId ?? this.invoiceId,
-      weight: weight ?? this.weight,
-      productPrice: productPrice ?? this.productPrice,
-      materialType: materialType ?? this.materialType,
-      category: category ?? this.category,
-      details: details ?? this.details,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'invoiceId': invoiceId,
-      'weight': weight,
-      'productPrice': productPrice,
-      'materialType': materialType,
-      'category': category,
-      'details': details,
-    };
-  }
-
-  factory RegularParcelInfo.fromMap(Map<String, dynamic> map) {
-    return RegularParcelInfo(
-      invoiceId: map['invoiceId'] ?? '',
-      weight: map['weight'] ?? '',
-      productPrice: map['productPrice']?.toInt() ?? 0,
-      materialType: map['materialType'] ?? '',
-      category: map['category'] ?? '',
-      details: map['details'] ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory RegularParcelInfo.fromJson(String source) =>
-      RegularParcelInfo.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'RegularParcelInfo(invoiceId: $invoiceId, weight: $weight, productPrice: $productPrice, materialType: $materialType, category: $category, details: $details)';
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      invoiceId,
-      weight,
-      productPrice,
-      materialType,
-      category,
-      details,
-    ];
-  }
-}
-
-class ExchangeParcelInfo extends Equatable {
-  final String invoiceId;
-  final String weight;
-  final int productPrice;
-  final String materialType;
-  final String category;
-  final String details;
-
-  const ExchangeParcelInfo({
-    required this.invoiceId,
-    required this.weight,
-    required this.productPrice,
-    required this.materialType,
-    required this.category,
-    required this.details,
-  });
-
-  factory ExchangeParcelInfo.init() => const ExchangeParcelInfo(
-        invoiceId: '',
-        weight: '',
-        productPrice: 0,
-        materialType: '',
-        category: '',
-        details: '',
-      );
-
-  ExchangeParcelInfo copyWith({
-    String? invoiceId,
-    String? weight,
-    int? productPrice,
-    String? materialType,
-    String? category,
-    String? details,
-  }) {
-    return ExchangeParcelInfo(
-      invoiceId: invoiceId ?? this.invoiceId,
-      weight: weight ?? this.weight,
-      productPrice: productPrice ?? this.productPrice,
-      materialType: materialType ?? this.materialType,
-      category: category ?? this.category,
-      details: details ?? this.details,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'invoiceId': invoiceId,
-      'weight': weight,
-      'productPrice': productPrice,
-      'materialType': materialType,
-      'category': category,
-      'details': details,
-    };
-  }
-
-  factory ExchangeParcelInfo.fromMap(Map<String, dynamic> map) {
-    return ExchangeParcelInfo(
-      invoiceId: map['invoiceId'] ?? '',
-      weight: map['weight'] ?? '',
-      productPrice: map['productPrice']?.toInt() ?? 0,
-      materialType: map['materialType'] ?? '',
-      category: map['category'] ?? '',
-      details: map['details'] ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ExchangeParcelInfo.fromJson(String source) =>
-      ExchangeParcelInfo.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'ExchangeParcelInfo(invoiceId: $invoiceId, weight: $weight, productPrice: $productPrice, materialType: $materialType, category: $category, details: $details)';
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      invoiceId,
-      weight,
-      productPrice,
-      materialType,
-      category,
-      details,
-    ];
-  }
-}
-
-class CustomerInfo extends Equatable {
-  final String name;
-  final String phone;
-  final String address;
-  final String districtId;
-  final String areaId;
-
-  const CustomerInfo({
-    required this.name,
-    required this.phone,
-    required this.address,
-    required this.districtId,
-    required this.areaId,
-  });
-
-  factory CustomerInfo.init() => const CustomerInfo(
-      name: '', phone: '', address: '', districtId: '', areaId: '');
-
-  CustomerInfo copyWith({
-    String? name,
-    String? phone,
-    String? address,
-    String? districtId,
-    String? areaId,
-  }) {
-    return CustomerInfo(
-      name: name ?? this.name,
-      phone: phone ?? this.phone,
-      address: address ?? this.address,
-      districtId: districtId ?? this.districtId,
-      areaId: areaId ?? this.areaId,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'phone': phone,
-      'address': address,
-      'districtId': districtId,
-      'areaId': areaId,
-    };
-  }
-
-  factory CustomerInfo.fromMap(Map<String, dynamic> map) {
-    return CustomerInfo(
-      name: map['name'] ?? '',
-      phone: map['phone'] ?? '',
-      address: map['address'] ?? '',
-      districtId: map['districtId'] ?? '',
-      areaId: map['areaId'] ?? '',
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory CustomerInfo.fromJson(String source) =>
-      CustomerInfo.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'CustomerInfo(name: $name, phone: $phone, address: $address, districtId: $districtId, areaId: $areaId)';
-  }
-
-  @override
-  List<Object> get props {
-    return [
-      name,
-      phone,
-      address,
-      districtId,
-      areaId,
+      sourceHub,
     ];
   }
 }

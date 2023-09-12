@@ -7,7 +7,6 @@ import '../../../core/core.dart';
 import '../domin/fetch_all_parcel_reponse.dart';
 import '../domin/parcel_model.dart';
 import '../infrastructure/parcel_repo.dart';
-import '../presentation/parcel_list_screen.dart';
 import 'parcel_state.dart';
 
 part 'parcel_provider.g.dart';
@@ -23,7 +22,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   ParcelNotifier(this.ref, this.repo) : super(ParcelState.init());
 
   Future<Either<CleanFailure, FetchAllParcelResponse>> fetchParcelList({
-    ParcelListType type = ParcelListType.all,
+    ParcelRegularStatus type = ParcelRegularStatus.all,
     int page = 1,
     int limit = 10,
   }) async {
@@ -37,7 +36,8 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   }
 
   void fetchCategorizedParcel(
-      {ParcelListType type = ParcelListType.all, int page = 1}) async {
+      {ParcelRegularStatus type = ParcelRegularStatus.all,
+      int page = 1}) async {
     state = state.copyWith(loading: true);
 
     final result = await fetchParcelList(type: type, page: page);
@@ -49,28 +49,28 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
       },
       (r) {
         switch (type) {
-          case ParcelListType.all:
+          case ParcelRegularStatus.all:
             state = state.copyWith(allParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.pending:
+          case ParcelRegularStatus.pending:
             state = state.copyWith(pendingParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.pickup:
+          case ParcelRegularStatus.pickup:
             state = state.copyWith(pickupParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.shipping:
+          case ParcelRegularStatus.shipping:
             state = state.copyWith(shippingParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.shipped:
+          case ParcelRegularStatus.shipped:
             state = state.copyWith(shippedParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.dropoff:
+          case ParcelRegularStatus.dropoff:
             state = state.copyWith(dropoffParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.returns:
+          case ParcelRegularStatus.returns:
             state = state.copyWith(returnParcel: r.data.lock, loading: false);
             break;
-          case ParcelListType.cancel:
+          case ParcelRegularStatus.cancel:
             state = state.copyWith(cancelParcel: r.data.lock, loading: false);
             break;
           default:
@@ -123,7 +123,7 @@ ParcelRepo parcelRepo(ParcelRepoRef ref) => ParcelRepo();
 class FetchAllParcel extends _$FetchAllParcel {
   @override
   Future<FetchAllParcelResponse> build(
-      {ParcelListType type = ParcelListType.all,
+      {ParcelRegularStatus type = ParcelRegularStatus.all,
       int page = 1,
       int limit = 10}) async {
     // final data = await http.post(
@@ -154,7 +154,7 @@ class FetchAllParcel extends _$FetchAllParcel {
 @riverpod
 Future<List<ParcelModel>> fetchCategorizedParcel(
   FetchCategorizedParcelRef ref, {
-  ParcelListType type = ParcelListType.all,
+  ParcelRegularStatus type = ParcelRegularStatus.all,
   int page = 1,
   int limit = 10,
 }) async {

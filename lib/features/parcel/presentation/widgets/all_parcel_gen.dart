@@ -8,7 +8,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../core/core.dart';
 
 import '../../application/parcel_provider.dart';
-import '../parcel_list_screen.dart';
+import '../../domin/parcel_model.dart';
 
 const packagesPackageSize = 100;
 const searchPageSize = 10;
@@ -19,7 +19,7 @@ class AllParcelGen extends HookConsumerWidget {
     required this.listType,
   });
 
-  final ParcelListType listType;
+  final ParcelRegularStatus listType;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -38,9 +38,6 @@ class AllParcelGen extends HookConsumerWidget {
     // });
 
     useEffect(() {
-      // Future.microtask(() => ref
-      //     .read(parcelProvider.notifier)
-      //     .fetchCategorizedParcel(type: listType));
       return () => BotToast.closeAllLoading();
     }, const []);
 
@@ -64,16 +61,13 @@ class AllParcelGen extends HookConsumerWidget {
 
             return parcelResponse.when(
               data: (data) {
+                if (data.data.isEmpty) {
+                  return const Center(child: Text("No parcel available..."));
+                }
                 if (indexInPage >= data.data.length) return null;
 
                 final parcel = data.data[indexInPage];
-                return DeliveryListTile(
-                  customerName: parcel.customerInfo.name,
-                  address: "169/B, North Konipara, Tejgoan, Dhaka, Bangladesh",
-                  price: parcel.regularPayment.cashCollection.toString(),
-                  serialId: parcel.serialId,
-                  status: parcel.regularStatus,
-                );
+                return DeliveryListTile(parcel: parcel);
               },
               error: (err, stack) {
                 Logger.e(err);
