@@ -43,7 +43,7 @@ class APIRoute {
   static const PARCEL_CATEGORY = "${API_V1}category/fetch-all";
   static const PARCEL_CREATE = "${API_V1}parcel/create-by-merchant";
   static const FETCH_ALL_PARCEL =
-      "${API_V1}parcel/fetch-all-parcel-by-merchant";
+      "${API_V1}parcel/fetch-all-parcel-by-merchant?";
 
   static const ORDER_CREATE = "";
 
